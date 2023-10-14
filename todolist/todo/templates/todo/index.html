@@ -1,0 +1,113 @@
+<!doctype html>
+{% load static %}
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport"
+          content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <link rel="stylesheet" href="{% static 'css/index.css' %}"/>
+    <title>Todo List</title>
+</head>
+<body>
+<header class="header">
+    <div class="container">
+        <div class="header-content">
+            <div class="header-content-title-blog">
+                <h2 class="header-content-title">Заметки</h2>
+            </div>
+            <div class="header-content-search-blog">
+                <img src="{% static 'img/icon.png' %}" class="header-content-search-icon" alt="logo">
+            </div>
+            <form class="header-content-form">
+                <label for="" class="header-content-form-label">
+                    <input type="search" class="header-content-form-input" placeholder="поиск">
+                    <button class="header-content-form-btn">поиск</button>
+                </label>
+            </form>
+        </div>
+    </div>
+</header>
+<img src="{% static 'img/icon_2.png' %}" id="logo_1" alt="">
+<img src="{% static 'img/icon_1.png' %}" id="logo_2" alt="">
+<section class="todo">
+    <div class="container">
+        <div class="todo_nav">
+            <h2 class="todo-nav-title">Все заметки</h2>
+            <button class="todo_nav-btn">
+                <img src="{% static 'img/icon_1.png' %}" alt="" class="todo_nav-btn-img">
+                <span class="todo_nav-btn-title">Список</span>
+            </button>
+        </div>
+        <div class="todo-list">
+            {% for tod in todolist %}
+            <div class="todo-item">
+                <h4 class="todo-item-title">{{ tod.todo_title }}</h4>
+                <span class="todo-item-data">{{ tod.todo_data_created|date:"d.m.Y" }}</span>
+                <p class="todo-item-text">{{ tod.todo_text }}</p>
+                <div class="todo-item-btn-group">
+                    <a href="{% url 'todo_update' tod.pk %}" class="todo-item-btn-edit">
+                        <img src="{% static 'img/icon_3.png' %}" alt="">
+                        <span class="todo-item-btn-title-edit">РЕДАКТИРОВАТЬ</span>
+                    </a>
+                    <a href="{% url 'todo_delete' tod.pk %}" class="todo-item-btn-delete">
+                        <img src="{% static 'img/icon_4.png' %}" alt="">
+                        <span class="todo-item-btn-title-delete">Удалить</span>
+                    </a>
+                </div>
+            </div>
+            {% endfor %}
+        </div>
+    </div>
+</section>
+<section class="windows">
+
+    {% if 'update' in request.path %}
+    <form class="windows-forms" action="" method="post" enctype="multipart/form-data">
+        {% csrf_token %}
+        <h4 class="windows-form-title">Добавить заметку</h4>
+        <label for="" class="windows-form-label">
+            <span class="windows-form-label-title">Название</span>
+            {{ form.todo_title }}
+        </label>
+        <label for="" class="windows-form-label">
+            <span class="windows-form-label-title">Содержание</span>
+            {{ form.todo_text }}
+        </label>
+        <div class="windows-form-btn-group">
+            <button class="windows-form-btn-close" type="reset">Отмена</button>
+            <button class="windows-form-btn-add" type="submit">
+                Изменять
+            </button>
+        </div>
+    </form>
+    {% else %}
+
+    <form class="windows-forms" action="{% url 'add_todo' %}" method="post" enctype="multipart/form-data">
+        {% csrf_token %}
+        <h4 class="windows-form-title">Добавить заметку</h4>
+        <label for="" class="windows-form-label">
+            <span class="windows-form-label-title">Название</span>
+            {{ form.todo_title }}
+        </label>
+        <label for="" class="windows-form-label">
+            <span class="windows-form-label-title">Содержание</span>
+            {{ form.todo_text }}
+        </label>
+        <div class="windows-form-btn-group">
+            <button class="windows-form-btn-close" type="reset">Отмена</button>
+            <button class="windows-form-btn-add" type="submit">
+                Добавить
+            </button>
+        </div>
+    </form>
+
+
+    {% endif %}
+</section>
+<div class="icon_add-todo">
+    <img src="{% static 'img/icon_3.png' %}" alt="">
+</div>
+<script src="{% static 'js/index.js' %}"></script>
+</body>
+</html>
